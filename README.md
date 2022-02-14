@@ -7,4 +7,4 @@
 ![ScreenShot](images/all.png)
 или только не выполненные.
 ![ScreenShot](images/only.png)
-Список задач хранятся в БД Postgres SQL, работу с БД организована через Hibernate.
+Список задач хранятся в БД Postgres SQL, работа с БД организована через Hibernate.
