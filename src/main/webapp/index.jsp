@@ -30,78 +30,13 @@
     <title>Список дел</title>
 </head>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script>
-    function checkState() {
-        let chkBox = document.getElementById('all');
-        if (chkBox.checked) {
-            getItemsTodo('true');
-        } else {
-            getItemsTodo('false');
-        }
-    }
-
-    function postStateItem(val) {
-        let index = 'input[id="' + val + '"]';
-        let value = document.querySelector(index).value;
-        let id = val;
-        let url = '<%=request.getContextPath()%>/todo?updateFlag=true&id=' + id + '&description=' + value;
-        $.ajax({
-            type: 'POST',
-            url: url,
-        }).done(function (data) {
-              checkState();
-        });
-    }
-
-    function getItemsTodo(flag) {
-        let url = '<%=request.getContextPath()%>/todo?flag=' + flag;
-        $.ajax({
-            type: 'GET',
-            url: url,
-            dataType: 'json'
-        }).done(function (data) {
-            let result = "";
-
-            if (flag) {
-                for (var item of data) {
-                    let rsl = item.done;
-                    let inputValue = item.description;
-                    let inputId = item.id;
-                    let endStr;
-
-                    if (rsl) {
-                        endStr = " disabled checked>";
-                    }
-
-                    if (!rsl) {
-                        endStr = ">";
-                    }
-                    result += '<tr><td>' + item.description + '</td>' +
-                        '<td><input class="form-check-input" type="checkbox" id=' + inputId
-                        + ' value=' + inputValue
-                        + ' onchange="postStateItem(this.id)"'
-                        + endStr + '</td></tr>';
-                }
-            }
-
-            if (!flag) {
-                let inputValue = item.id;
-                let inputId = "task" + inputValue;
-                result += '<tr><td>' + item.description + '</td>' +
-                    '<td><input class="form-check-input" type="checkbox" id=' + inputId + '</td></tr>';
-            }
-
-            $('#listItems').html(result);
-        })
-    }
-
-    $(document).ready(getItemsTodo('false'));
-</script>
+<script src="todo.js"></script>
+<script>$(document).ready(getItemsTodo('false'));</script>
 <body>
 <div class="container">
     <div class="card-body">
         <div class="row">
-            <form id="my_form" action="<%=request.getContextPath()%>/todo?updateFlag=false" method="post">
+            <form id="my_form" action="<%=request.getContextPath()%>/todo.date" method="get">
                 <div class="form-group">
                     <label for="description">Описание задачи</label>
                     <input required type="text" class="form-control" id="description" name="description"

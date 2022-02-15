@@ -12,15 +12,20 @@ public class Item {
     private int id;
     private String description;
     private LocalDateTime created = LocalDateTime.now();
-    private Boolean done = false;
+    private boolean done = false;
 
     public Item() {
     }
 
-    public Item(int id, String description, Boolean done) {
+    public Item(int id, String description, boolean done) {
         this.id = id;
         this.description = description;
         this.done = done;
+    }
+
+    public Item(int id, String description) {
+        this.id = id;
+        this.description = description;
     }
 
     public int getId() {
@@ -47,11 +52,11 @@ public class Item {
         this.created = created;
     }
 
-    public Boolean getDone() {
+    public boolean getDone() {
         return done;
     }
 
-    public void setDone(Boolean done) {
+    public void setDone(boolean done) {
         this.done = done;
     }
 

@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class ToDoServlet extends HttpServlet {
+public class ToDoListServlet extends HttpServlet {
     private static final Gson GSON = new GsonBuilder().create();
 
     @Override
@@ -35,26 +35,5 @@ public class ToDoServlet extends HttpServlet {
         output.write(json.getBytes(StandardCharsets.UTF_8));
         output.flush();
         output.close();
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        DbStore db = DbStore.instOf();
-        Boolean updateFlag = req.getParameter("updateFlag").equals("true");
-        String description = req.getParameter("description");
-
-        if (updateFlag) {
-            int id = Integer.valueOf(req.getParameter("id"));
-            Item item = new Item(id, description, updateFlag);
-            db.replace(item);
-            resp.sendRedirect(req.getContextPath() + "/index.jsp");
-            return;
-        } else {
-            Item item = new Item();
-            item.setDescription(description);
-            db.add(item);
-            resp.sendRedirect(req.getContextPath() + "/index.jsp");
-            return;
-        }
     }
 }
