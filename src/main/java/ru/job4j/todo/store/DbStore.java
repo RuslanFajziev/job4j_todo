@@ -7,6 +7,8 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import ru.job4j.todo.model.Item;
 
+import java.util.function.Function;
+
 import java.util.List;
 
 public class DbStore {
@@ -26,19 +28,24 @@ public class DbStore {
         return Lazy.INST;
     }
 
-    public Item add(Item item) {
+    private <T> T tx(final Function<Session, T> command) {
         Session session = sf.openSession();
         session.beginTransaction();
         try {
-            session.save(item);
+            T rsl = command.apply(session);
             session.getTransaction().commit();
-            return item;
-        } catch (Exception e) {
+            return rsl;
+        } catch (final Exception e) {
             session.getTransaction().rollback();
-            throw new IllegalStateException(e);
+            throw e;
         } finally {
             session.close();
         }
+    }
+
+    public Item add(Item item) {
+        tx(session -> session.save(item));
+        return item;
     }
 
     public boolean replace(Item item) {
@@ -57,47 +64,14 @@ public class DbStore {
     }
 
     public List<Item> findAll() {
-        Session session = sf.openSession();
-        session.beginTransaction();
-        try {
-            List<Item> lst = session.createQuery("from ru.job4j.todo.model.Item").list();
-            session.getTransaction().commit();
-            return lst;
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-            throw new IllegalStateException(e);
-        } finally {
-            session.close();
-        }
+        return tx(session -> session.createQuery("from ru.job4j.todo.model.Item").list());
     }
 
     public List<Item> findAllNotCompleted() {
-        Session session = sf.openSession();
-        session.beginTransaction();
-        try {
-            List<Item> lst = session.createQuery("from ru.job4j.todo.model.Item where done = false").list();
-            session.getTransaction().commit();
-            return lst;
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-            throw new IllegalStateException(e);
-        } finally {
-            session.close();
-        }
+        return tx(session -> session.createQuery("from ru.job4j.todo.model.Item where done = false").list());
     }
 
     public Item findById(int id) {
-        Session session = sf.openSession();
-        session.beginTransaction();
-        try {
-            Item item = session.get(Item.class, id);
-            session.getTransaction().commit();
-            return item;
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-            throw new IllegalStateException(e);
-        } finally {
-            session.close();
-        }
+        return tx(session -> session.get(Item.class, id));
     }
 }
