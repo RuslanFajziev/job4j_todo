@@ -13,7 +13,7 @@ function postStateItem(val) {
     let id = val;
     let url = 'http://localhost:8080/job4j_todo/todo.date?id=' + id + '&description=' + value;
     $.ajax({
-        type: 'POST',
+        type: 'PUT',
         url: url,
     }).done(function (data) {
         checkState();

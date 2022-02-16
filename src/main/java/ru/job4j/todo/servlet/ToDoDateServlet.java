@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class ToDoDateServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         DbStore db = DbStore.instOf();
         String description = req.getParameter("description");
         Item item = new Item();
@@ -21,12 +21,11 @@ public class ToDoDateServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         DbStore db = DbStore.instOf();
         String description = req.getParameter("description");
         int id = Integer.valueOf(req.getParameter("id"));
         Item item = new Item(id, description, true);
         db.replace(item);
-        resp.sendRedirect(req.getContextPath() + "/index.jsp");
     }
 }

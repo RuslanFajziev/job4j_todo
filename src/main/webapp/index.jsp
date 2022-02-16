@@ -36,7 +36,7 @@
 <div class="container">
     <div class="card-body">
         <div class="row">
-            <form id="my_form" action="<%=request.getContextPath()%>/todo.date" method="get">
+            <form id="my_form" action="<%=request.getContextPath()%>/todo.date" method="post">
                 <div class="form-group">
                     <label for="description">Описание задачи</label>
                     <input required type="text" class="form-control" id="description" name="description"
