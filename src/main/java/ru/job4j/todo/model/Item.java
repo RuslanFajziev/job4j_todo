@@ -13,19 +13,18 @@ public class Item {
     private String description;
     private LocalDateTime created = LocalDateTime.now();
     private boolean done = false;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Item() {
     }
 
-    public Item(int id, String description, boolean done) {
-        this.id = id;
-        this.description = description;
-        this.done = done;
-    }
-
-    public Item(int id, String description) {
-        this.id = id;
-        this.description = description;
+    public static Item of(String description, User user) {
+        Item item = new Item();
+        item.description = description;
+        item.user = user;
+        return item;
     }
 
     public int getId() {
@@ -52,12 +51,20 @@ public class Item {
         this.created = created;
     }
 
-    public boolean getDone() {
+    public boolean isDone() {
         return done;
     }
 
     public void setDone(boolean done) {
         this.done = done;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
@@ -67,6 +74,7 @@ public class Item {
                 + ", description='" + description + '\''
                 + ", created=" + created
                 + ", done=" + done
+                + ", user=" + user
                 + '}';
     }
 
@@ -79,12 +87,12 @@ public class Item {
             return false;
         }
         Item item = (Item) o;
-        return id == item.id && Objects.equals(description, item.description)
-                && Objects.equals(created, item.created) && Objects.equals(done, item.done);
+        return id == item.id && done == item.done && Objects.equals(description, item.description)
+                && Objects.equals(created, item.created) && Objects.equals(user, item.user);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, description, created, done);
+        return Objects.hash(id, description, created, done, user);
     }
 }

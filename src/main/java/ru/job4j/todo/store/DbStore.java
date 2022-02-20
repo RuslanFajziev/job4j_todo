@@ -6,6 +6,7 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import ru.job4j.todo.model.Item;
+import ru.job4j.todo.model.User;
 
 import java.util.function.Function;
 
@@ -48,6 +49,16 @@ public class DbStore {
         return item;
     }
 
+    public User addUser(User user) {
+        tx(session -> session.save(user));
+        return user;
+    }
+
+    public List<User> findUser(String key) {
+        String keyString = "'".concat(key).concat("'");
+        return tx(session -> session.createQuery("from ru.job4j.todo.model.User where email = " + keyString).list());
+    }
+
     public boolean replace(Item item) {
         Session session = sf.openSession();
         session.beginTransaction();
@@ -63,12 +74,12 @@ public class DbStore {
         }
     }
 
-    public List<Item> findAll() {
-        return tx(session -> session.createQuery("from ru.job4j.todo.model.Item").list());
+    public List<Item> findAll(int key) {
+        return tx(session -> session.createQuery("from ru.job4j.todo.model.Item where user_id = " + key).list());
     }
 
-    public List<Item> findAllNotCompleted() {
-        return tx(session -> session.createQuery("from ru.job4j.todo.model.Item where done = false").list());
+    public List<Item> findAllNotCompleted(int key) {
+        return tx(session -> session.createQuery("from ru.job4j.todo.model.Item where done = false and user_id = " + key).list());
     }
 
     public Item findById(int id) {

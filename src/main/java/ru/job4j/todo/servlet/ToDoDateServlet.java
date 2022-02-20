@@ -1,12 +1,14 @@
 package ru.job4j.todo.servlet;
 
 import ru.job4j.todo.model.Item;
+import ru.job4j.todo.model.User;
 import ru.job4j.todo.store.DbStore;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class ToDoDateServlet extends HttpServlet {
@@ -14,8 +16,9 @@ public class ToDoDateServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         DbStore db = DbStore.instOf();
         String description = req.getParameter("description");
-        Item item = new Item();
-        item.setDescription(description);
+        HttpSession sc = req.getSession();
+        User user = (User) sc.getAttribute("user");
+        Item item = Item.of(description, user);
         db.add(item);
         resp.sendRedirect(req.getContextPath() + "/index.jsp");
     }
@@ -25,7 +28,11 @@ public class ToDoDateServlet extends HttpServlet {
         DbStore db = DbStore.instOf();
         String description = req.getParameter("description");
         int id = Integer.valueOf(req.getParameter("id"));
-        Item item = new Item(id, description, true);
+        HttpSession sc = req.getSession();
+        User user = (User) sc.getAttribute("user");
+        Item item = Item.of(description, user);
+        item.setId(id);
+        item.setDone(true);
         db.replace(item);
     }
 }

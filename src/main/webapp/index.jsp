@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: FaizievRT
-  Date: 009 09.02.2022
-  Time: 0:39
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 <!doctype html>
@@ -31,10 +24,25 @@
 </head>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="todo.js"></script>
-<script>$(document).ready(getItemsTodo('false'));</script>
+<script>
+    <c:if test="${user != null}">
+    $(document).ready(getItemsTodo('false'));
+    </c:if>
+</script>
 <body>
 <div class="container">
     <div class="card-body">
+        <div class="row">
+            <c:if test="${user == null}">
+
+                    <a class="nav-link" href="<%=request.getContextPath()%>/login.jsp">Войти</a>
+
+                    <a class="nav-link" href="<%=request.getContextPath()%>/reg.jsp">Регистрация</a>
+
+            </c:if>
+        </div>
+        <c:if test="${user != null}">
+            <a class="nav-link" href="<%=request.getContextPath()%>/logout.do">Выйти из <c:out value="${user.email}"/></a>
         <div class="row">
             <form id="my_form" action="<%=request.getContextPath()%>/todo.date" method="post">
                 <div class="form-group">
@@ -51,6 +59,7 @@
                 Show all
             </label>
         </div>
+        </c:if>
         <div class="row">
             <table class="table">
                 <thead>

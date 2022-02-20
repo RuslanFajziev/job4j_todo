@@ -12,12 +12,36 @@
     <servlet-name>ToDoDateServlet</servlet-name>
     <servlet-class>ru.job4j.todo.servlet.ToDoDateServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>AuthServlet</servlet-name>
+    <servlet-class>ru.job4j.todo.servlet.AuthServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>LogoutServlet</servlet-name>
+    <servlet-class>ru.job4j.todo.servlet.LogoutServlet</servlet-class>
+  </servlet>
+  <filter>
+    <filter-name>AuthFilter</filter-name>
+    <filter-class>ru.job4j.todo.filter.AuthFilter</filter-class>
+  </filter>
   <servlet-mapping>
     <servlet-name>ToDoListServlet</servlet-name>
     <url-pattern>/todo</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
+    <servlet-name>AuthServlet</servlet-name>
+    <url-pattern>/login.do</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
     <servlet-name>ToDoDateServlet</servlet-name>
     <url-pattern>/todo.date</url-pattern>
   </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>LogoutServlet</servlet-name>
+    <url-pattern>/logout.do</url-pattern>
+  </servlet-mapping>
+  <filter-mapping>
+    <filter-name>AuthFilter</filter-name>
+    <url-pattern>*.date</url-pattern>
+  </filter-mapping>
 </web-app>
