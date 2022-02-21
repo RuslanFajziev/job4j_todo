@@ -55,8 +55,11 @@ public class DbStore {
     }
 
     public List<User> findUser(String key) {
-        String keyString = "'".concat(key).concat("'");
-        return tx(session -> session.createQuery("from ru.job4j.todo.model.User where email = " + keyString).list());
+        return tx(session -> {
+            var query = session.createQuery("from ru.job4j.todo.model.User where email = :key");
+            query.setParameter("key", key);
+            return query.list();
+        });
     }
 
     public boolean replace(Item item) {
@@ -75,11 +78,19 @@ public class DbStore {
     }
 
     public List<Item> findAll(int key) {
-        return tx(session -> session.createQuery("from ru.job4j.todo.model.Item where user_id = " + key).list());
+        return tx(session -> {
+            var query = session.createQuery("from ru.job4j.todo.model.Item where user_id = :key");
+            query.setParameter("key", key);
+            return query.list();
+        });
     }
 
     public List<Item> findAllNotCompleted(int key) {
-        return tx(session -> session.createQuery("from ru.job4j.todo.model.Item where done = false and user_id = " + key).list());
+        return tx(session -> {
+            var query = session.createQuery("from ru.job4j.todo.model.Item where done = false and user_id = :key");
+            query.setParameter("key", key);
+            return query.list();
+        });
     }
 
     public Item findById(int id) {
