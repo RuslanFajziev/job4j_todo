@@ -54,11 +54,11 @@ public class DbStore {
         return user;
     }
 
-    public List<User> findUser(String key) {
+    public User findUser(String key) {
         return tx(session -> {
             var query = session.createQuery("from ru.job4j.todo.model.User where email = :key");
             query.setParameter("key", key);
-            return query.list();
+            return (User) query.uniqueResult();
         });
     }
 
