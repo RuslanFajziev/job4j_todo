@@ -2,7 +2,9 @@ package ru.job4j.todo.model;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "items")
@@ -17,6 +19,9 @@ public class Item {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    private Set<CategoryItem> categoryItems = new HashSet<>();
+
     public Item() {
     }
 
@@ -25,6 +30,18 @@ public class Item {
         item.description = description;
         item.user = user;
         return item;
+    }
+
+    public void addCategory(CategoryItem category) {
+        this.categoryItems.add(category);
+    }
+
+    public Set<CategoryItem> getCategoryItems() {
+        return categoryItems;
+    }
+
+    public void setCategoryItems(Set<CategoryItem> categoryItems) {
+        this.categoryItems = categoryItems;
     }
 
     public int getId() {
@@ -75,6 +92,7 @@ public class Item {
                 + ", created=" + created
                 + ", done=" + done
                 + ", user=" + user
+                + ", categoryItems=" + categoryItems
                 + '}';
     }
 
@@ -88,11 +106,12 @@ public class Item {
         }
         Item item = (Item) o;
         return id == item.id && done == item.done && Objects.equals(description, item.description)
-                && Objects.equals(created, item.created) && Objects.equals(user, item.user);
+                && Objects.equals(created, item.created) && Objects.equals(user, item.user)
+                && Objects.equals(categoryItems, item.categoryItems);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, description, created, done, user);
+        return Objects.hash(id, description, created, done, user, categoryItems);
     }
 }

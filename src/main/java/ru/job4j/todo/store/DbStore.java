@@ -5,6 +5,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import ru.job4j.todo.model.CategoryItem;
 import ru.job4j.todo.model.Item;
 import ru.job4j.todo.model.User;
 
@@ -44,8 +45,16 @@ public class DbStore {
         }
     }
 
-    public Item add(Item item) {
-        tx(session -> session.save(item));
+    public Item add(Item item, String[] ids) {
+        tx(session -> {
+                    for (String id : ids) {
+                        CategoryItem categoryItem = session.find(CategoryItem.class, Integer.parseInt(id));
+                        item.addCategory(categoryItem);
+                    }
+                    session.save(item);
+                    return item;
+                }
+        );
         return item;
     }
 
@@ -75,6 +84,10 @@ public class DbStore {
         } finally {
             session.close();
         }
+    }
+
+    public List<CategoryItem> categoryItemsAll() {
+        return tx(session -> session.createQuery("from ru.job4j.todo.model.CategoryItem").list());
     }
 
     public List<Item> findAll(int key) {

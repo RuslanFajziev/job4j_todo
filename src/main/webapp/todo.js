@@ -20,7 +20,23 @@ function postStateItem(val) {
     });
 }
 
+function getСategories() {
+    $.ajax({
+        type: 'GET',
+        url: 'http://localhost:8080/job4j_todo/cityJson.do',
+        dataType: 'json'
+    }).done(function (data) {
+        let result = "";
+        // result += "<option disabled selected>Выберите город</option>";
+        for (var сategoryItem of data) {
+            result += "<option value=" + сategoryItem.id + " checked>" + сategoryItem.name + "</option>";
+        }
+        $('#categoryItem').html(result);
+    });
+}
+
 function getItemsTodo(flag) {
+    getСategories();
     let url = 'http://localhost:8080/job4j_todo/todo?flag=' + flag;
     $.ajax({
         type: 'GET',

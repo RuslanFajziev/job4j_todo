@@ -16,10 +16,12 @@ public class ToDoDateServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         DbStore db = DbStore.instOf();
         String description = req.getParameter("description");
+        String[] ids = req.getParameterValues("categoryItem");
         HttpSession sc = req.getSession();
         User user = (User) sc.getAttribute("user");
         Item item = Item.of(description, user);
-        db.add(item);
+
+        db.add(item, ids);
         resp.sendRedirect(req.getContextPath() + "/index.jsp");
     }
 

@@ -35,30 +35,33 @@
         <div class="row">
             <c:if test="${user == null}">
 
-                    <a class="nav-link" href="<%=request.getContextPath()%>/login.jsp">Войти</a>
+                <a class="nav-link" href="<%=request.getContextPath()%>/login.jsp">Войти</a>
 
-                    <a class="nav-link" href="<%=request.getContextPath()%>/reg.jsp">Регистрация</a>
+                <a class="nav-link" href="<%=request.getContextPath()%>/reg.jsp">Регистрация</a>
 
             </c:if>
         </div>
         <c:if test="${user != null}">
-            <a class="nav-link" href="<%=request.getContextPath()%>/logout.do">Выйти из <c:out value="${user.email}"/></a>
-        <div class="row">
-            <form id="my_form" action="<%=request.getContextPath()%>/todo.date" method="post">
-                <div class="form-group">
-                    <label for="description">Описание задачи</label>
-                    <input required type="text" class="form-control" id="description" name="description"
-                           placeholder="Описание задачи">
-                </div>
-                <button type="submit" class="btn btn-success">Добавить задачу</button>
-            </form>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="all" id="all" onchange="checkState()">
-            <label class="form-check-label" for="all">
-                Show all
-            </label>
-        </div>
+            <a class="nav-link" href="<%=request.getContextPath()%>/logout.do">Выйти из <c:out
+                    value="${user.email}"/></a>
+            <div class="row">
+                <form id="my_form" action="<%=request.getContextPath()%>/todo.date" method="post">
+                    <div class="form-group">
+                        <label for="description">Описание задачи</label>
+                        <input required type="text" class="form-control" id="description" name="description"
+                               placeholder="Описание задачи">
+                    </div>
+                    <label for="categoryItem">Категории</label>
+                    <select class="form-control" id="categoryItem" name="categoryItem" multiple></select>
+                    <button type="submit" class="btn btn-success">Добавить задачу</button>
+                </form>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="all" id="all" onchange="checkState()">
+                <label class="form-check-label" for="all">
+                    Show all
+                </label>
+            </div>
         </c:if>
         <div class="row">
             <table class="table">
