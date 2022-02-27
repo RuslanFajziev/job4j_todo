@@ -90,9 +90,17 @@ public class DbStore {
         return tx(session -> session.createQuery("from ru.job4j.todo.model.CategoryItem").list());
     }
 
+    public Item findItem(int id) {
+        return tx(session -> {
+            var query = session.createQuery("select itm from Item itm join fetch itm.categoryItems where itm.id = :key", Item.class);
+            query.setParameter("key", id);
+            return query.uniqueResult();
+        });
+    }
+
     public List<Item> findAll(int key) {
         return tx(session -> {
-            var query = session.createQuery("from ru.job4j.todo.model.Item where user_id = :key");
+            var query = session.createQuery("select DISTINCT itm from Item itm join fetch itm.categoryItems where user_id = :key");
             query.setParameter("key", key);
             return query.list();
         });
@@ -100,7 +108,7 @@ public class DbStore {
 
     public List<Item> findAllNotCompleted(int key) {
         return tx(session -> {
-            var query = session.createQuery("from ru.job4j.todo.model.Item where done = false and user_id = :key");
+            var query = session.createQuery("select DISTINCT itm from Item itm join fetch itm.categoryItems where done = false and user_id = :key");
             query.setParameter("key", key);
             return query.list();
         });

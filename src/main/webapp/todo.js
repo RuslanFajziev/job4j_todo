@@ -23,7 +23,7 @@ function postStateItem(val) {
 function getСategories() {
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:8080/job4j_todo/cityJson.do',
+        url: 'http://localhost:8080/job4j_todo/categoryJson.do',
         dataType: 'json'
     }).done(function (data) {
         let result = "";

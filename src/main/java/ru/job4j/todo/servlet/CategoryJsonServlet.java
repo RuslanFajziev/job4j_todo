@@ -13,7 +13,7 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-public class CityJsonServlet extends HttpServlet {
+public class CategoryJsonServlet extends HttpServlet {
     private static final Gson GSON = new GsonBuilder().create();
 
     @Override

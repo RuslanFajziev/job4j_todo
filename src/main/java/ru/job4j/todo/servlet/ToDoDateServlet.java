@@ -1,5 +1,6 @@
 package ru.job4j.todo.servlet;
 
+import ru.job4j.todo.model.CategoryItem;
 import ru.job4j.todo.model.Item;
 import ru.job4j.todo.model.User;
 import ru.job4j.todo.store.DbStore;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Set;
 
 public class ToDoDateServlet extends HttpServlet {
     @Override
@@ -34,6 +36,8 @@ public class ToDoDateServlet extends HttpServlet {
         User user = (User) sc.getAttribute("user");
         Item item = Item.of(description, user);
         item.setId(id);
+        Set<CategoryItem> categoryItems = db.findItem(id).getCategoryItems();
+        categoryItems.forEach(item::addCategory);
         item.setDone(true);
         db.replace(item);
     }
